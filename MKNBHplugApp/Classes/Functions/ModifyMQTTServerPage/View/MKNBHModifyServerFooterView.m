@@ -380,7 +380,10 @@ MKNBHModifyServerLWTViewDelegate>
     self.lwtView.dataModel = lwtModel;
     
     MKNBHModifyServerSettingViewModel *settingModel = [[MKNBHModifyServerSettingViewModel alloc] init];
-    
+    settingModel.apn = _dataModel.apn;
+    settingModel.networkUsername = _dataModel.networkUsername;
+    settingModel.networkPassword = _dataModel.networkPassword;
+    settingModel.networkPriority = _dataModel.networkPriority;
     self.settingView.dataModel = settingModel;
     
     [self loadSubViews];

@@ -56,9 +56,9 @@ typedef NS_ENUM(NSInteger, mk_nbh_mqtt_networkPriority) {
 
 /*
  Blue.
- European and French specifications:1 <=  b_color <= 4411.
- American specifications:1 <=  b_color <= 2155.
- British specifications:1 <=  b_color <= 3584.
+ European and French specifications:2 <=  b_color <= 4411.
+ American specifications:2 <=  b_color <= 2155.
+ British specifications:2 <=  b_color <= 3584.
  */
 @property (nonatomic, assign)NSInteger b_color;
 

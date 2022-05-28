@@ -728,7 +728,7 @@
                   topic:(NSString *)topic
                sucBlock:(void (^)(void))sucBlock
             failedBlock:(void (^)(NSError *error))failedBlock {
-    if (!ValidStr(host) || host.length > 64 || !ValidStr(filePath) || filePath.length > 100 || port < 1 || port > 65535) {
+    if (!ValidStr(host) || host.length > 64 || !ValidStr(filePath) || filePath.length > 128 || port < 1 || port > 65535) {
         [self operationFailedBlockWithMsg:@"Params error" failedBlock:failedBlock];
         return;
     }
@@ -761,7 +761,7 @@
                        topic:(NSString *)topic
                     sucBlock:(void (^)(void))sucBlock
                  failedBlock:(void (^)(NSError *error))failedBlock {
-    if (!ValidStr(host) || host.length > 64 || !ValidStr(filePath) || filePath.length > 100 || port < 1 || port > 65535) {
+    if (!ValidStr(host) || host.length > 64 || !ValidStr(filePath) || filePath.length > 128 || port < 1 || port > 65535) {
         [self operationFailedBlockWithMsg:@"Params error" failedBlock:failedBlock];
         return;
     }
@@ -796,7 +796,7 @@
                                 topic:(NSString *)topic
                              sucBlock:(void (^)(void))sucBlock
                           failedBlock:(void (^)(NSError *error))failedBlock {
-    if (!ValidStr(host) || host.length > 64 || !ValidStr(caFilePath) || caFilePath.length > 100 || port < 1 || port > 65535 || !ValidStr(clientKeyPath) || clientKeyPath.length > 100 || !ValidStr(clientCertPath) || clientCertPath.length > 100) {
+    if (!ValidStr(host) || host.length > 64 || !ValidStr(caFilePath) || caFilePath.length > 128 || port < 1 || port > 65535 || !ValidStr(clientKeyPath) || clientKeyPath.length > 128 || !ValidStr(clientCertPath) || clientCertPath.length > 128) {
         [self operationFailedBlockWithMsg:@"Params error" failedBlock:failedBlock];
         return;
     }
@@ -1386,7 +1386,7 @@
                         topic:(NSString *)topic
                      sucBlock:(void (^)(void))sucBlock
                   failedBlock:(void (^)(NSError *error))failedBlock {
-    if (!ValidStr(host) || host.length > 64 || !ValidStr(filePath) || filePath.length > 100 || port < 1 || port > 65535) {
+    if (!ValidStr(host) || host.length > 64 || !ValidStr(filePath) || filePath.length > 128 || port < 1 || port > 65535) {
         [self operationFailedBlockWithMsg:@"Params error" failedBlock:failedBlock];
         return;
     }
@@ -1421,7 +1421,7 @@
                                    topic:(NSString *)topic
                                 sucBlock:(void (^)(void))sucBlock
                              failedBlock:(void (^)(NSError *error))failedBlock {
-    if (!ValidStr(host) || host.length > 64 || !ValidStr(caFilePath) || caFilePath.length > 100 || port < 1 || port > 65535 || !ValidStr(clientKeyPath) || clientKeyPath.length > 100 || !ValidStr(clientCertPath) || clientCertPath.length > 100) {
+    if (!ValidStr(host) || host.length > 64 || !ValidStr(caFilePath) || caFilePath.length > 128 || port < 1 || port > 65535 || !ValidStr(clientKeyPath) || clientKeyPath.length > 128 || !ValidStr(clientCertPath) || clientCertPath.length > 128) {
         [self operationFailedBlockWithMsg:@"Params error" failedBlock:failedBlock];
         return;
     }
@@ -1527,7 +1527,7 @@
         }else if (productModel == mk_nbh_productModel_UK) {
             maxValue = 3588;
         }
-        if (protocol.b_color < 1 || protocol.b_color > (maxValue - 5)) {
+        if (protocol.b_color < 2 || protocol.b_color > (maxValue - 5)) {
             return NO;
         }
         if (protocol.g_color <= protocol.b_color || protocol.g_color > (maxValue - 4)) {

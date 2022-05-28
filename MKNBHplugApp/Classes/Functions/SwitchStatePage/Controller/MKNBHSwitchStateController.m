@@ -254,7 +254,7 @@ static CGFloat const buttonViewHeight = 50.f;
                                                                 preferredStyle:UIAlertControllerStyleAlert];
     alertView.notificationName = @"mk_nbh_needDismissAlert";
     UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"NO" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"mk_nbh_popToRootWithoutAlertNotification" object:nil];
+        [self popToViewControllerWithClassName:@"MKNBHDeviceListController"];
     }];
     [alertView addAction:cancelAction];
     @weakify(self);
@@ -282,7 +282,7 @@ static CGFloat const buttonViewHeight = 50.f;
                                                                 preferredStyle:UIAlertControllerStyleAlert];
     alertView.notificationName = @"mk_nbh_needDismissAlert";
     UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"NO" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"mk_nbh_popToRootWithoutAlertNotification" object:nil];
+        [self popToViewControllerWithClassName:@"MKNBHDeviceListController"];
     }];
     [alertView addAction:cancelAction];
     @weakify(self);
