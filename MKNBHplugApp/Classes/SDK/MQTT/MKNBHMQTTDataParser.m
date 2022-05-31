@@ -701,10 +701,10 @@
         return resultDic;
     }
     NSString *voltage = [MKNBHMQTTSDKAdopter getDecimalStringWithHex:content range:NSMakeRange(0, 4)];
-    NSString *current = [MKNBHMQTTSDKAdopter getDecimalStringWithHex:content range:NSMakeRange(4, 4)];
-    NSString *power = [MKNBHMQTTSDKAdopter getDecimalStringWithHex:content range:NSMakeRange(8, 8)];
+    NSNumber *current = [MKNBHMQTTSDKAdopter signedHexTurnString:[content substringWithRange:NSMakeRange(4, 4)]];
+    NSNumber *power = [MKNBHMQTTSDKAdopter signedHexTurnString:[content substringWithRange:NSMakeRange(8, 8)]];
     NSString *frequency = [MKNBHMQTTSDKAdopter getDecimalStringWithHex:content range:NSMakeRange(16, 4)];
-    NSString *factor = [MKNBHMQTTSDKAdopter getDecimalStringWithHex:content range:NSMakeRange(20, 2)];
+    NSNumber *factor = [MKNBHMQTTSDKAdopter signedHexTurnString:[content substringWithRange:NSMakeRange(20, 2)]];
     NSDictionary *dataDic = @{
         @"voltage":voltage,
         @"current":current,
@@ -1155,10 +1155,10 @@
     NSString *timezone = [MKNBHMQTTSDKAdopter getDecimalStringWithHex:content range:NSMakeRange(8, 2)];
 
     NSString *voltage = [MKNBHMQTTSDKAdopter getDecimalStringWithHex:content range:NSMakeRange(10, 4)];
-    NSString *current = [MKNBHMQTTSDKAdopter getDecimalStringWithHex:content range:NSMakeRange(14, 4)];
-    NSString *power = [MKNBHMQTTSDKAdopter getDecimalStringWithHex:content range:NSMakeRange(18, 8)];
+    NSNumber *current = [MKNBHMQTTSDKAdopter signedHexTurnString:[content substringWithRange:NSMakeRange(14, 4)]];
+    NSNumber *power = [MKNBHMQTTSDKAdopter signedHexTurnString:[content substringWithRange:NSMakeRange(18, 8)]];
     NSString *frequency = [MKNBHMQTTSDKAdopter getDecimalStringWithHex:content range:NSMakeRange(26, 4)];
-    NSString *factor = [MKNBHMQTTSDKAdopter getDecimalStringWithHex:content range:NSMakeRange(30, 2)];
+    NSNumber *factor = [MKNBHMQTTSDKAdopter signedHexTurnString:[content substringWithRange:NSMakeRange(30, 2)]];
    
     NSDictionary *dataDic = @{
         @"voltage":voltage,

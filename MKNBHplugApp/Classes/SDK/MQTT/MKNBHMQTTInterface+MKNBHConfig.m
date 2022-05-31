@@ -820,7 +820,7 @@
     NSString *clientKeyPathValue = [MKNBHMQTTSDKAdopter fetchAsciiCode:clientKeyPath];
     NSString *clientKeyPathLen = [MKNBHMQTTSDKAdopter fetchHexValue:clientKeyPath.length byteLen:1];
     
-    NSString *totalLen = [MKNBHMQTTSDKAdopter fetchHexValue:(hostValue.length + caFilePath.length + clientCertPath.length + clientKeyPath.length + 6) byteLen:2];
+    NSString *totalLen = [MKNBHMQTTSDKAdopter fetchHexValue:(host.length + caFilePath.length + clientCertPath.length + clientKeyPath.length + 6) byteLen:2];
     NSString *commandString = [NSString stringWithFormat:@"ed012c%@%@%@%@%@%@%@%@%@%@%@",asciiIDString,totalLen,portValue,hostLen,hostValue,caPathLen,caPathValue,clientPathLen,clientPathValue,clientKeyPathLen,clientKeyPathValue];
     [self publishCommand:commandString
                    topic:topic
@@ -1445,7 +1445,7 @@
     NSString *clientKeyPathValue = [MKNBHMQTTSDKAdopter fetchAsciiCode:clientKeyPath];
     NSString *clientKeyPathLen = [MKNBHMQTTSDKAdopter fetchHexValue:clientKeyPath.length byteLen:1];
     
-    NSString *totalLen = [MKNBHMQTTSDKAdopter fetchHexValue:(hostValue.length + caFilePath.length + clientCertPath.length + clientKeyPath.length + 6) byteLen:2];
+    NSString *totalLen = [MKNBHMQTTSDKAdopter fetchHexValue:(host.length + caFilePath.length + clientCertPath.length + clientKeyPath.length + 6) byteLen:2];
     NSString *commandString = [NSString stringWithFormat:@"ed0176%@%@%@%@%@%@%@%@%@%@%@",asciiIDString,totalLen,portValue,hostLen,hostValue,caPathLen,caPathValue,clientPathLen,clientPathValue,clientKeyPathLen,clientKeyPathValue];
     [self publishCommand:commandString
                    topic:topic

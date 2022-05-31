@@ -77,6 +77,10 @@
     if (!ValidData(data) || data.length < 7) {
         return @{};
     }
+    NSString *header = [self hexStringFromData:[data subdataWithRange:NSMakeRange(0, 1)]];
+    if (![header isEqualToString:@"ed"]) {
+        return @{};
+    }
     NSMutableDictionary *dic = [NSMutableDictionary dictionary];
     NSString *flag = [self hexStringFromData:[data subdataWithRange:NSMakeRange(1, 1)]];
     [dic setObject:flag forKey:@"msg_flag"];

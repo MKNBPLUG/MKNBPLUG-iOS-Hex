@@ -233,7 +233,7 @@ MKNBHDebuggerCellDelegate>
     MKAlertController *alertView = [MKAlertController alertControllerWithTitle:@""
                                                                        message:@"Please confirm whether to delete the files?"
                                                                 preferredStyle:UIAlertControllerStyleAlert];
-    alertView.notificationName = @"mk_nbj_needDismissAlert";
+    alertView.notificationName = @"mk_nbh_needDismissAlert";
     
     UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"NO" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         
@@ -309,14 +309,18 @@ MKNBHDebuggerCellDelegate>
 }
 
 - (void)loadTableViewDatas:(NSArray *)logList {
+    NSMutableArray *tempDataList = [NSMutableArray array];
     for (NSInteger i = 0; i < logList.count; i ++) {
         NSDictionary *dic = logList[i];
         MKNBHDebuggerCellModel *cellModel = [[MKNBHDebuggerCellModel alloc] init];
-        cellModel.index = [dic[@"key"] integerValue];
+        cellModel.index = logList.count - 1 - i;
         cellModel.logInfo = dic[@"logDetails"];
         cellModel.timeMsg = dic[@"date"];
-        [self.dataList addObject:cellModel];
+        [tempDataList addObject:cellModel];
     }
+    NSSortDescriptor *descriptor = [NSSortDescriptor sortDescriptorWithKey:@"timeMsg" ascending:NO];
+    NSArray *tempArray = [tempDataList sortedArrayUsingDescriptors:@[descriptor]];
+    [self.dataList addObjectsFromArray:tempArray];
     
     [self.tableView reloadData];
 }
@@ -349,6 +353,7 @@ MKNBHDebuggerCellDelegate>
             [self.dataList addObject:tempModel];
         }
     }
+    
     [self saveDataListToLocal];
     [self.contentList removeAllObjects];
 }
@@ -358,9 +363,9 @@ MKNBHDebuggerCellDelegate>
     for (NSInteger i = 0; i < self.dataList.count; i ++) {
         MKNBHDebuggerCellModel *cellModel = self.dataList[i];
         NSDictionary *dic = @{
-            @"key":[NSString stringWithFormat:@"%ld",(long)cellModel.index],
             @"date":cellModel.timeMsg,
             @"logDetails":cellModel.logInfo,
+            @"dataIndex":[NSString stringWithFormat:@"%@",@(cellModel.index)],
         };
         [tempList addObject:dic];
     }

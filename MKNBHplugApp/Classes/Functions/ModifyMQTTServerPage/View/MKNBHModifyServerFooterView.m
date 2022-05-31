@@ -14,7 +14,8 @@
 #import "NSString+MKAdd.h"
 
 #import "MKMQTTGeneralParamsView.h"
-#import "MKMQTTUserCredentialsView.h"
+
+#import "MKNBHUserCredentialsView.h"
 
 #import "MKNBHModifyServerSSLView.h"
 #import "MKNBHModifyServerSettingView.h"
@@ -30,7 +31,7 @@ static CGFloat const defaultScrollViewHeight = 330.f;
 
 @interface MKNBHModifyServerFooterView ()<UIScrollViewDelegate,
 MKMQTTGeneralParamsViewDelegate,
-MKMQTTUserCredentialsViewDelegate,
+MKNBHUserCredentialsViewDelegate,
 MKNBHModifyServerSSLViewDelegate,
 MKNBHModifyServerSettingViewDelegate,
 MKNBHModifyServerLWTViewDelegate>
@@ -51,7 +52,7 @@ MKNBHModifyServerLWTViewDelegate>
 
 @property (nonatomic, strong)MKMQTTGeneralParamsView *generalView;
 
-@property (nonatomic, strong)MKMQTTUserCredentialsView *credentialsView;
+@property (nonatomic, strong)MKNBHUserCredentialsView *credentialsView;
 
 @property (nonatomic, strong)MKNBHModifyServerSSLView *sslView;
 
@@ -172,15 +173,14 @@ MKNBHModifyServerLWTViewDelegate>
     }
 }
 
-#pragma mark - MKMQTTUserCredentialsViewDelegate
-
-- (void)mk_mqtt_userCredentials_userNameChanged:(NSString *)userName {
+#pragma mark - MKNBHUserCredentialsViewDelegate
+- (void)nbh_mqtt_userCredentials_userNameChanged:(NSString *)userName {
     if ([self.delegate respondsToSelector:@selector(nbh_mqtt_modifyMQTT_textFieldValueChanged:textID:)]) {
         [self.delegate nbh_mqtt_modifyMQTT_textFieldValueChanged:userName textID:1];
     }
 }
 
-- (void)mk_mqtt_userCredentials_passwordChanged:(NSString *)password {
+- (void)nbh_mqtt_userCredentials_passwordChanged:(NSString *)password {
     if ([self.delegate respondsToSelector:@selector(nbh_mqtt_modifyMQTT_textFieldValueChanged:textID:)]) {
         [self.delegate nbh_mqtt_modifyMQTT_textFieldValueChanged:password textID:2];
     }
@@ -356,7 +356,7 @@ MKNBHModifyServerLWTViewDelegate>
     generalModel.keepAlive = _dataModel.keepAlive;
     self.generalView.dataModel = generalModel;
     
-    MKMQTTUserCredentialsViewModel *credentialsViewModel = [[MKMQTTUserCredentialsViewModel alloc] init];
+    MKNBHUserCredentialsViewModel *credentialsViewModel = [[MKNBHUserCredentialsViewModel alloc] init];
     credentialsViewModel.userName = _dataModel.userName;
     credentialsViewModel.password = _dataModel.password;
     self.credentialsView.dataModel = credentialsViewModel;
@@ -505,9 +505,9 @@ MKNBHModifyServerLWTViewDelegate>
     return _credentialsButton;
 }
 
-- (MKMQTTUserCredentialsView *)credentialsView {
+- (MKNBHUserCredentialsView *)credentialsView {
     if (!_credentialsView) {
-        _credentialsView = [[MKMQTTUserCredentialsView alloc] init];
+        _credentialsView = [[MKNBHUserCredentialsView alloc] init];
         _credentialsView.delegate = self;
     }
     return _credentialsView;

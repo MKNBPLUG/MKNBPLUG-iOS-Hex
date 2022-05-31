@@ -74,6 +74,7 @@ MKNBHDeviceListCellDelegate>
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     //移除runloop的监听
     CFRunLoopRemoveObserver(CFRunLoopGetCurrent(), self.observerRef, kCFRunLoopCommonModes);
+    [[MKNBHMQTTServerManager shared] clearAllSubscriptions];
     [[MKNBHMQTTServerManager shared] disconnect];
     [MKNBHMQTTServerManager singleDealloc];
 }

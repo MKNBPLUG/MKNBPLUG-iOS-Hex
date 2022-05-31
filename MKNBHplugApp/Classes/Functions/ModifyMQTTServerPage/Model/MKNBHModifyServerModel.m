@@ -46,7 +46,7 @@ static NSString *const defaultPubTopic = @"{device_name}/{device_id}/device_to_a
         _keepAlive = @"60";
         _qos = 1;
         _lwtQos = 1;
-        _lwtTopic = defaultSubTopic;
+        _lwtTopic = defaultPubTopic;
         _lwtPayload = @"Offline";
     }
     return self;
@@ -228,7 +228,7 @@ static NSString *const defaultPubTopic = @"{device_name}/{device_id}/device_to_a
 
 - (NSString *)currentLWTTopic {
     NSString *topic = @"";
-    if ([self.lwtTopic isEqualToString:defaultSubTopic]) {
+    if ([self.lwtTopic isEqualToString:defaultPubTopic]) {
         //用户使用默认的topic
         topic = [NSString stringWithFormat:@"%@/%@/%@",[MKNBHDeviceModeManager shared].deviceName,[MKNBHDeviceModeManager shared].deviceID,@"device_to_app"];
     }else {
@@ -573,10 +573,10 @@ static NSString *const defaultPubTopic = @"{device_name}/{device_id}/device_to_a
     if (!ValidStr(self.keepAlive) || [self.keepAlive integerValue] < 10 || [self.keepAlive integerValue] > 120) {
         return @"KeepAlive error";
     }
-    if (self.userName.length > 256 || (ValidStr(self.userName) && ![self.userName isAsciiString])) {
+    if (self.userName.length > 128 || (ValidStr(self.userName) && ![self.userName isAsciiString])) {
         return @"UserName error";
     }
-    if (self.password.length > 256 || (ValidStr(self.password) && ![self.password isAsciiString])) {
+    if (self.password.length > 128 || (ValidStr(self.password) && ![self.password isAsciiString])) {
         return @"Password error";
     }
     if (self.sslIsOn) {
