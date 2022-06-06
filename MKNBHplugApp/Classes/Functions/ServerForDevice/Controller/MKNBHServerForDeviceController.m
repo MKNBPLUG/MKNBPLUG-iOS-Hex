@@ -615,11 +615,11 @@ MKNBHImportServerControllerDelegate>
 
 #pragma mark - private method
 - (void)exportServerConfig {
-    NSString *errorMsg = [self.dataModel checkParams];
-    if (ValidStr(errorMsg)) {
-        [self.view showCentralToast:errorMsg];
-        return;
-    }
+//    NSString *errorMsg = [self.dataModel checkParams];
+//    if (ValidStr(errorMsg)) {
+//        [self.view showCentralToast:errorMsg];
+//        return;
+//    }
     [[MKHudManager share] showHUDWithTitle:@"Waiting..." inView:self.view isPenetration:NO];
     [MKNBHExcelDataManager exportDeviceExcel:self.dataModel
                                     sucBlock:^{

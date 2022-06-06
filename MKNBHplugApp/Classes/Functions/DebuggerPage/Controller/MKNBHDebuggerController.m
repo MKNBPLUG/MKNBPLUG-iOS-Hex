@@ -365,7 +365,6 @@ MKNBHDebuggerCellDelegate>
         NSDictionary *dic = @{
             @"date":cellModel.timeMsg,
             @"logDetails":cellModel.logInfo,
-            @"dataIndex":[NSString stringWithFormat:@"%@",@(cellModel.index)],
         };
         [tempList addObject:dic];
     }
