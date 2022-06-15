@@ -244,12 +244,12 @@ static NSString *const defaultKeyValueString = @"value:";
     MKNBHExcelCell *keepAliveCell = [sheet getCellWithColumn:@"B" row:9 error:nil];
     NSString *keepAlive = [SafeStr(keepAliveCell.stringValue) stringByReplacingOccurrencesOfString:defaultKeyValueString withString:@""];
     keepAlive = [keepAlive stringByReplacingOccurrencesOfString:@" " withString:@""];
-    NSInteger keepValue = [keepAlive integerValue];
-    if (keepValue < 10 || keepValue > 120) {
-        //默认值
-        keepValue = 60;
-    }
-    [dic setObject:@(keepValue) forKey:@"keepAlive"];
+//    NSInteger keepValue = [keepAlive integerValue];
+//    if (keepValue < 10 || keepValue > 120) {
+//        //默认值
+//        keepValue = 60;
+//    }
+    [dic setObject:keepAlive forKey:@"keepAlive"];
     //MQTT Username
     MKNBHExcelCell *usernameCell = [sheet getCellWithColumn:@"B" row:10 error:nil];
     NSString *username = [SafeStr(usernameCell.stringValue) stringByReplacingOccurrencesOfString:defaultKeyValueString withString:@""];
@@ -605,12 +605,12 @@ static NSString *const defaultKeyValueString = @"value:";
     //Keep Alive
     MKNBHExcelCell *keepAliveCell = [sheet getCellWithColumn:@"B" row:9 error:nil];
     NSString *keepAlive = [SafeStr(keepAliveCell.stringValue) stringByReplacingOccurrencesOfString:defaultKeyValueString withString:@""];
-    NSInteger keepValue = [keepAlive integerValue];
-    if (keepValue < 10 || keepValue > 120) {
-        //默认值
-        keepValue = 60;
-    }
-    [dic setObject:@(keepValue) forKey:@"keepAlive"];
+//    NSInteger keepValue = [keepAlive integerValue];
+//    if (keepValue < 10 || keepValue > 120) {
+//        //默认值
+//        keepValue = 60;
+//    }
+    [dic setObject:keepAlive forKey:@"keepAlive"];
     //MQTT Username
     MKNBHExcelCell *usernameCell = [sheet getCellWithColumn:@"B" row:10 error:nil];
     NSString *username = [SafeStr(usernameCell.stringValue) stringByReplacingOccurrencesOfString:defaultKeyValueString withString:@""];
