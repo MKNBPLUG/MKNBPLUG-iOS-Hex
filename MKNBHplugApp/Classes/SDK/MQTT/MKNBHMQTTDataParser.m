@@ -704,7 +704,7 @@
     NSNumber *current = [MKNBHMQTTSDKAdopter signedHexTurnString:[content substringWithRange:NSMakeRange(4, 4)]];
     NSNumber *power = [MKNBHMQTTSDKAdopter signedHexTurnString:[content substringWithRange:NSMakeRange(8, 8)]];
     NSString *frequency = [MKNBHMQTTSDKAdopter getDecimalStringWithHex:content range:NSMakeRange(16, 4)];
-    NSNumber *factor = [MKNBHMQTTSDKAdopter signedHexTurnString:[content substringWithRange:NSMakeRange(20, 2)]];
+    NSString *factor = [MKNBHMQTTSDKAdopter getDecimalStringWithHex:content range:NSMakeRange(20, 2)];
     NSDictionary *dataDic = @{
         @"voltage":voltage,
         @"current":current,
@@ -746,7 +746,8 @@
     NSMutableArray *energyList = [NSMutableArray array];
     for (NSInteger i = 0; i < [totalNum integerValue]; i ++) {
         NSString *tempEnergy = [MKNBHMQTTSDKAdopter getDecimalStringWithHex:energyContent range:NSMakeRange(i * 4, 4)];
-        [energyList addObject:tempEnergy];
+        NSString *energyValue = [NSString stringWithFormat:@"%.2f",([tempEnergy integerValue] * 0.01)];
+        [energyList addObject:energyValue];
     }
     
     NSDictionary *dataDic = @{
@@ -1158,7 +1159,7 @@
     NSNumber *current = [MKNBHMQTTSDKAdopter signedHexTurnString:[content substringWithRange:NSMakeRange(14, 4)]];
     NSNumber *power = [MKNBHMQTTSDKAdopter signedHexTurnString:[content substringWithRange:NSMakeRange(18, 8)]];
     NSString *frequency = [MKNBHMQTTSDKAdopter getDecimalStringWithHex:content range:NSMakeRange(26, 4)];
-    NSNumber *factor = [MKNBHMQTTSDKAdopter signedHexTurnString:[content substringWithRange:NSMakeRange(30, 2)]];
+    NSString *factor = [MKNBHMQTTSDKAdopter getDecimalStringWithHex:content range:NSMakeRange(30, 2)];
    
     NSDictionary *dataDic = @{
         @"voltage":voltage,

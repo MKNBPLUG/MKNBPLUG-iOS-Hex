@@ -18,42 +18,853 @@
   "platforms": {
     "ios": "12.0"
   },
-  "source_files": "MKNBHplugApp/Classes/**/*",
   "resource_bundles": {
     "MKNBHplugApp": [
       "MKNBHplugApp/Assets/*.png"
     ]
   },
-  "dependencies": {
-    "MKBaseModuleLibrary": [
+  "subspecs": [
+    {
+      "name": "Target",
+      "source_files": "MKNBHplugApp/Classes/Target/**",
+      "dependencies": {
+        "MKBaseModuleLibrary": [
 
-    ],
-    "MKBaseBleModule": [
+        ],
+        "MKNBHplugApp/Functions": [
 
-    ],
-    "MKCustomUIModule": [
+        ]
+      }
+    },
+    {
+      "name": "SDK",
+      "dependencies": {
+        "MKBaseModuleLibrary": [
 
-    ],
-    "MKBaseMQTTModule": [
+        ],
+        "MKBaseMQTTModule": [
 
-    ],
-    "HHTransition": [
+        ]
+      },
+      "subspecs": [
+        {
+          "name": "BLE",
+          "source_files": "MKNBHplugApp/Classes/SDK/BLE/**",
+          "dependencies": {
+            "MKBaseBleModule": [
 
-    ],
-    "MLInputDodger": [
+            ]
+          }
+        },
+        {
+          "name": "MQTT",
+          "source_files": "MKNBHplugApp/Classes/SDK/MQTT/**"
+        }
+      ]
+    },
+    {
+      "name": "Expand",
+      "dependencies": {
+        "MKBaseModuleLibrary": [
 
-    ],
-    "iOSDFULibrary": [
+        ],
+        "MKNBHplugApp/SDK/MQTT": [
 
-    ],
-    "FMDB": [
+        ],
+        "MKCustomUIModule": [
 
-    ],
-    "libxlsxwriter": [
+        ]
+      },
+      "subspecs": [
+        {
+          "name": "BaseController",
+          "subspecs": [
+            {
+              "name": "Controller",
+              "source_files": "MKNBHplugApp/Classes/Expand/BaseController/Controller/**",
+              "dependencies": {
+                "MKNBHplugApp/Expand/BaseController/Model": [
 
-    ],
-    "SSZipArchive": [
+                ]
+              }
+            },
+            {
+              "name": "Model",
+              "source_files": "MKNBHplugApp/Classes/Expand/BaseController/Model/**",
+              "dependencies": {
+                "MKNBHplugApp/Expand/DeviceModel": [
 
-    ]
-  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "DeviceModel",
+          "subspecs": [
+            {
+              "name": "Manager",
+              "source_files": "MKNBHplugApp/Classes/Expand/DeviceModel/Manager/**"
+            },
+            {
+              "name": "Model",
+              "source_files": "MKNBHplugApp/Classes/Expand/DeviceModel/Model/**"
+            }
+          ]
+        },
+        {
+          "name": "Manager",
+          "subspecs": [
+            {
+              "name": "DatabaseManager",
+              "source_files": "MKNBHplugApp/Classes/Expand/Manager/DatabaseManager/**",
+              "dependencies": {
+                "MKNBHplugApp/Expand/DeviceModel/Model": [
+
+                ],
+                "FMDB": [
+
+                ]
+              }
+            },
+            {
+              "name": "ExcelManager",
+              "source_files": "MKNBHplugApp/Classes/Expand/Manager/ExcelManager/**",
+              "dependencies": {
+                "libxlsxwriter": [
+
+                ],
+                "SSZipArchive": [
+
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "View",
+          "subspecs": [
+            {
+              "name": "UserCredentialsView",
+              "source_files": "MKNBHplugApp/Classes/Expand/View/UserCredentialsView/**"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Functions",
+      "dependencies": {
+        "MKNBHplugApp/SDK": [
+
+        ],
+        "MKNBHplugApp/Expand": [
+
+        ],
+        "MKBaseModuleLibrary": [
+
+        ],
+        "MKCustomUIModule": [
+
+        ],
+        "HHTransition": [
+
+        ],
+        "MLInputDodger": [
+
+        ],
+        "CTMediator": [
+
+        ]
+      },
+      "subspecs": [
+        {
+          "name": "AddDevicePage",
+          "subspecs": [
+            {
+              "name": "Controller",
+              "source_files": "MKNBHplugApp/Classes/Functions/AddDevicePage/Controller/**",
+              "dependencies": {
+                "MKNBHplugApp/Functions/AddDevicePage/View": [
+
+                ],
+                "MKNBHplugApp/Functions/ServerForDevice/Controller": [
+
+                ],
+                "MKNBHplugApp/Functions/UpdatePage/Controller": [
+
+                ]
+              }
+            },
+            {
+              "name": "View",
+              "source_files": "MKNBHplugApp/Classes/Functions/AddDevicePage/View/**"
+            }
+          ]
+        },
+        {
+          "name": "ConnectSettingPage",
+          "subspecs": [
+            {
+              "name": "Controller",
+              "source_files": "MKNBHplugApp/Classes/Functions/ConnectSettingPage/Controller/**",
+              "dependencies": {
+                "MKNBHplugApp/Functions/ConnectSettingPage/Model": [
+
+                ]
+              }
+            },
+            {
+              "name": "Model",
+              "source_files": "MKNBHplugApp/Classes/Functions/ConnectSettingPage/Model/**"
+            }
+          ]
+        },
+        {
+          "name": "ConnectSuccessPage",
+          "subspecs": [
+            {
+              "name": "Controller",
+              "source_files": "MKNBHplugApp/Classes/Functions/ConnectSuccessPage/Controller/**"
+            }
+          ]
+        },
+        {
+          "name": "DebuggerPage",
+          "subspecs": [
+            {
+              "name": "Controller",
+              "source_files": "MKNBHplugApp/Classes/Functions/DebuggerPage/Controller/**",
+              "dependencies": {
+                "MKNBHplugApp/Functions/DebuggerPage/View": [
+
+                ]
+              }
+            },
+            {
+              "name": "View",
+              "source_files": "MKNBHplugApp/Classes/Functions/DebuggerPage/View/**"
+            }
+          ]
+        },
+        {
+          "name": "DeviceInfoPage",
+          "subspecs": [
+            {
+              "name": "Controller",
+              "source_files": "MKNBHplugApp/Classes/Functions/DeviceInfoPage/Controller/**",
+              "dependencies": {
+                "MKNBHplugApp/Functions/DeviceInfoPage/Model": [
+
+                ]
+              }
+            },
+            {
+              "name": "Model",
+              "source_files": "MKNBHplugApp/Classes/Functions/DeviceInfoPage/Model/**"
+            }
+          ]
+        },
+        {
+          "name": "DeviceListPage",
+          "subspecs": [
+            {
+              "name": "Controller",
+              "source_files": "MKNBHplugApp/Classes/Functions/DeviceListPage/Controller/**",
+              "dependencies": {
+                "MKNBHplugApp/Functions/DeviceListPage/View": [
+
+                ],
+                "MKNBHplugApp/Functions/DeviceListPage/Model": [
+
+                ],
+                "MKNBHplugApp/Functions/ServerForApp/Controller": [
+
+                ],
+                "MKNBHplugApp/Functions/ScanPage/Controller": [
+
+                ],
+                "MKNBHplugApp/Functions/SwitchStatePage/Controller": [
+
+                ]
+              }
+            },
+            {
+              "name": "Model",
+              "source_files": "MKNBHplugApp/Classes/Functions/DeviceListPage/Model/**"
+            },
+            {
+              "name": "View",
+              "source_files": "MKNBHplugApp/Classes/Functions/DeviceListPage/View/**"
+            }
+          ]
+        },
+        {
+          "name": "ElectricityPage",
+          "subspecs": [
+            {
+              "name": "Controller",
+              "source_files": "MKNBHplugApp/Classes/Functions/ElectricityPage/Controller/**",
+              "dependencies": {
+                "MKNBHplugApp/Functions/ElectricityPage/Model": [
+
+                ]
+              }
+            },
+            {
+              "name": "Model",
+              "source_files": "MKNBHplugApp/Classes/Functions/ElectricityPage/Model/**"
+            }
+          ]
+        },
+        {
+          "name": "EnergyPage",
+          "subspecs": [
+            {
+              "name": "Controller",
+              "source_files": "MKNBHplugApp/Classes/Functions/EnergyPage/Controller/**",
+              "dependencies": {
+                "MKNBHplugApp/Functions/EnergyPage/Model": [
+
+                ],
+                "MKNBHplugApp/Functions/EnergyPage/View": [
+
+                ]
+              }
+            },
+            {
+              "name": "Model",
+              "source_files": "MKNBHplugApp/Classes/Functions/EnergyPage/Model/**"
+            },
+            {
+              "name": "View",
+              "source_files": "MKNBHplugApp/Classes/Functions/EnergyPage/View/**"
+            }
+          ]
+        },
+        {
+          "name": "EnergyParamPage",
+          "subspecs": [
+            {
+              "name": "Controller",
+              "source_files": "MKNBHplugApp/Classes/Functions/EnergyParamPage/Controller/**",
+              "dependencies": {
+                "MKNBHplugApp/Functions/EnergyParamPage/Model": [
+
+                ]
+              }
+            },
+            {
+              "name": "Model",
+              "source_files": "MKNBHplugApp/Classes/Functions/EnergyParamPage/Model/**"
+            }
+          ]
+        },
+        {
+          "name": "ImportServerPage",
+          "subspecs": [
+            {
+              "name": "Controller",
+              "source_files": "MKNBHplugApp/Classes/Functions/ImportServerPage/Controller/**"
+            }
+          ]
+        },
+        {
+          "name": "IndicatorColorPage",
+          "subspecs": [
+            {
+              "name": "Controller",
+              "source_files": "MKNBHplugApp/Classes/Functions/IndicatorColorPage/Controller/**",
+              "dependencies": {
+                "MKNBHplugApp/Functions/IndicatorColorPage/Model": [
+
+                ],
+                "MKNBHplugApp/Functions/IndicatorColorPage/View": [
+
+                ]
+              }
+            },
+            {
+              "name": "Model",
+              "source_files": "MKNBHplugApp/Classes/Functions/IndicatorColorPage/Model/**"
+            },
+            {
+              "name": "View",
+              "source_files": "MKNBHplugApp/Classes/Functions/IndicatorColorPage/View/**"
+            }
+          ]
+        },
+        {
+          "name": "IndicatorSettingPage",
+          "subspecs": [
+            {
+              "name": "Controller",
+              "source_files": "MKNBHplugApp/Classes/Functions/IndicatorSettingPage/Controller/**",
+              "dependencies": {
+                "MKNBHplugApp/Functions/IndicatorSettingPage/Model": [
+
+                ],
+                "MKNBHplugApp/Functions/IndicatorColorPage/Controller": [
+
+                ]
+              }
+            },
+            {
+              "name": "Model",
+              "source_files": "MKNBHplugApp/Classes/Functions/IndicatorSettingPage/Model/**"
+            }
+          ]
+        },
+        {
+          "name": "ModifyMQTTServerPage",
+          "subspecs": [
+            {
+              "name": "Controller",
+              "source_files": "MKNBHplugApp/Classes/Functions/ModifyMQTTServerPage/Controller/**",
+              "dependencies": {
+                "MKNBHplugApp/Functions/ModifyMQTTServerPage/Model": [
+
+                ],
+                "MKNBHplugApp/Functions/ModifyMQTTServerPage/View": [
+
+                ]
+              }
+            },
+            {
+              "name": "Model",
+              "source_files": "MKNBHplugApp/Classes/Functions/ModifyMQTTServerPage/Model/**"
+            },
+            {
+              "name": "View",
+              "source_files": "MKNBHplugApp/Classes/Functions/ModifyMQTTServerPage/View/**"
+            }
+          ]
+        },
+        {
+          "name": "MQTTSettingInfoPage",
+          "subspecs": [
+            {
+              "name": "Controller",
+              "source_files": "MKNBHplugApp/Classes/Functions/MQTTSettingInfoPage/Controller/**",
+              "dependencies": {
+                "MKNBHplugApp/Functions/MQTTSettingInfoPage/Model": [
+
+                ],
+                "MKNBHplugApp/Functions/MQTTSettingInfoPage/View": [
+
+                ]
+              }
+            },
+            {
+              "name": "Model",
+              "source_files": "MKNBHplugApp/Classes/Functions/MQTTSettingInfoPage/Model/**"
+            },
+            {
+              "name": "View",
+              "source_files": "MKNBHplugApp/Classes/Functions/MQTTSettingInfoPage/View/**"
+            }
+          ]
+        },
+        {
+          "name": "NotificationSwitchPage",
+          "subspecs": [
+            {
+              "name": "Controller",
+              "source_files": "MKNBHplugApp/Classes/Functions/NotificationSwitchPage/Controller/**",
+              "dependencies": {
+                "MKNBHplugApp/Functions/NotificationSwitchPage/Model": [
+
+                ]
+              }
+            },
+            {
+              "name": "Model",
+              "source_files": "MKNBHplugApp/Classes/Functions/NotificationSwitchPage/Model/**"
+            }
+          ]
+        },
+        {
+          "name": "NTPServerPage",
+          "subspecs": [
+            {
+              "name": "Controller",
+              "source_files": "MKNBHplugApp/Classes/Functions/NTPServerPage/Controller/**",
+              "dependencies": {
+                "MKNBHplugApp/Functions/NTPServerPage/Model": [
+
+                ]
+              }
+            },
+            {
+              "name": "Model",
+              "source_files": "MKNBHplugApp/Classes/Functions/NTPServerPage/Model/**"
+            }
+          ]
+        },
+        {
+          "name": "OTAPage",
+          "subspecs": [
+            {
+              "name": "Controller",
+              "source_files": "MKNBHplugApp/Classes/Functions/OTAPage/Controller/**",
+              "dependencies": {
+                "MKNBHplugApp/Functions/OTAPage/Model": [
+
+                ]
+              }
+            },
+            {
+              "name": "Model",
+              "source_files": "MKNBHplugApp/Classes/Functions/OTAPage/Model/**"
+            }
+          ]
+        },
+        {
+          "name": "PeriodicalReportPage",
+          "subspecs": [
+            {
+              "name": "Controller",
+              "source_files": "MKNBHplugApp/Classes/Functions/PeriodicalReportPage/Controller/**",
+              "dependencies": {
+                "MKNBHplugApp/Functions/PeriodicalReportPage/Model": [
+
+                ]
+              }
+            },
+            {
+              "name": "Model",
+              "source_files": "MKNBHplugApp/Classes/Functions/PeriodicalReportPage/Model/**"
+            }
+          ]
+        },
+        {
+          "name": "PowerOnModePage",
+          "subspecs": [
+            {
+              "name": "Controller",
+              "source_files": "MKNBHplugApp/Classes/Functions/PowerOnModePage/Controller/**",
+              "dependencies": {
+                "MKNBHplugApp/Functions/PowerOnModePage/Model": [
+
+                ],
+                "MKNBHplugApp/Functions/PowerOnModePage/View": [
+
+                ]
+              }
+            },
+            {
+              "name": "Model",
+              "source_files": "MKNBHplugApp/Classes/Functions/PowerOnModePage/Model/**"
+            },
+            {
+              "name": "View",
+              "source_files": "MKNBHplugApp/Classes/Functions/PowerOnModePage/View/**"
+            }
+          ]
+        },
+        {
+          "name": "PowerReportPage",
+          "subspecs": [
+            {
+              "name": "Controller",
+              "source_files": "MKNBHplugApp/Classes/Functions/PowerReportPage/Controller/**",
+              "dependencies": {
+                "MKNBHplugApp/Functions/PowerReportPage/Model": [
+
+                ]
+              }
+            },
+            {
+              "name": "Model",
+              "source_files": "MKNBHplugApp/Classes/Functions/PowerReportPage/Model/**"
+            }
+          ]
+        },
+        {
+          "name": "ProtectionConfigPage",
+          "subspecs": [
+            {
+              "name": "Controller",
+              "source_files": "MKNBHplugApp/Classes/Functions/ProtectionConfigPage/Controller/**",
+              "dependencies": {
+                "MKNBHplugApp/Functions/ProtectionConfigPage/Model": [
+
+                ],
+                "MKNBHplugApp/Functions/ProtectionConfigPage/Header": [
+
+                ]
+              }
+            },
+            {
+              "name": "Model",
+              "source_files": "MKNBHplugApp/Classes/Functions/ProtectionConfigPage/Model/**",
+              "dependencies": {
+                "MKNBHplugApp/Functions/ProtectionConfigPage/Header": [
+
+                ]
+              }
+            },
+            {
+              "name": "Header",
+              "source_files": "MKNBHplugApp/Classes/Functions/ProtectionConfigPage/Header/**"
+            }
+          ]
+        },
+        {
+          "name": "ProtectionSwitchPage",
+          "subspecs": [
+            {
+              "name": "Controller",
+              "source_files": "MKNBHplugApp/Classes/Functions/ProtectionSwitchPage/Controller/**",
+              "dependencies": {
+                "MKNBHplugApp/Functions/ProtectionConfigPage/Controller": [
+
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "ScanPage",
+          "subspecs": [
+            {
+              "name": "Controller",
+              "source_files": "MKNBHplugApp/Classes/Functions/ScanPage/Controller/**",
+              "dependencies": {
+                "MKNBHplugApp/Functions/ScanPage/Model": [
+
+                ],
+                "MKNBHplugApp/Functions/ScanPage/View": [
+
+                ],
+                "MKNBHplugApp/Functions/AddDevicePage/Controller": [
+
+                ],
+                "MKNBHplugApp/Functions/DebuggerPage/Controller": [
+
+                ]
+              }
+            },
+            {
+              "name": "View",
+              "source_files": "MKNBHplugApp/Classes/Functions/ScanPage/View/**",
+              "dependencies": {
+                "MKNBHplugApp/Functions/ScanPage/Model": [
+
+                ]
+              }
+            },
+            {
+              "name": "Model",
+              "source_files": "MKNBHplugApp/Classes/Functions/ScanPage/Model/**"
+            }
+          ]
+        },
+        {
+          "name": "ServerForApp",
+          "subspecs": [
+            {
+              "name": "Controller",
+              "source_files": "MKNBHplugApp/Classes/Functions/ServerForApp/Controller/**",
+              "dependencies": {
+                "MKNBHplugApp/Functions/ServerForApp/Model": [
+
+                ],
+                "MKNBHplugApp/Functions/ServerForApp/View": [
+
+                ],
+                "MKNBHplugApp/Functions/ImportServerPage/Controller": [
+
+                ]
+              }
+            },
+            {
+              "name": "View",
+              "source_files": "MKNBHplugApp/Classes/Functions/ServerForApp/View/**"
+            },
+            {
+              "name": "Model",
+              "source_files": "MKNBHplugApp/Classes/Functions/ServerForApp/Model/**"
+            }
+          ]
+        },
+        {
+          "name": "ServerForDevice",
+          "subspecs": [
+            {
+              "name": "Controller",
+              "source_files": "MKNBHplugApp/Classes/Functions/ServerForDevice/Controller/**",
+              "dependencies": {
+                "MKNBHplugApp/Functions/ServerForDevice/Model": [
+
+                ],
+                "MKNBHplugApp/Functions/ServerForDevice/View": [
+
+                ],
+                "MKNBHplugApp/Functions/ImportServerPage/Controller": [
+
+                ],
+                "MKNBHplugApp/Functions/ConnectSuccessPage/Controller": [
+
+                ]
+              }
+            },
+            {
+              "name": "View",
+              "source_files": "MKNBHplugApp/Classes/Functions/ServerForDevice/View/**"
+            },
+            {
+              "name": "Model",
+              "source_files": "MKNBHplugApp/Classes/Functions/ServerForDevice/Model/**"
+            }
+          ]
+        },
+        {
+          "name": "SettingsPage",
+          "subspecs": [
+            {
+              "name": "Controller",
+              "source_files": "MKNBHplugApp/Classes/Functions/SettingsPage/Controller/**",
+              "dependencies": {
+                "MKNBHplugApp/Functions/SettingsPage/Model": [
+
+                ],
+                "MKNBHplugApp/Functions/PowerOnModePage/Controller": [
+
+                ],
+                "MKNBHplugApp/Functions/PeriodicalReportPage/Controller": [
+
+                ],
+                "MKNBHplugApp/Functions/PowerReportPage/Controller": [
+
+                ],
+                "MKNBHplugApp/Functions/EnergyParamPage/Controller": [
+
+                ],
+                "MKNBHplugApp/Functions/ConnectSettingPage/Controller": [
+
+                ],
+                "MKNBHplugApp/Functions/SystemTimePage/Controller": [
+
+                ],
+                "MKNBHplugApp/Functions/ProtectionSwitchPage/Controller": [
+
+                ],
+                "MKNBHplugApp/Functions/NotificationSwitchPage/Controller": [
+
+                ],
+                "MKNBHplugApp/Functions/IndicatorSettingPage/Controller": [
+
+                ],
+                "MKNBHplugApp/Functions/ModifyMQTTServerPage/Controller": [
+
+                ],
+                "MKNBHplugApp/Functions/OTAPage/Controller": [
+
+                ],
+                "MKNBHplugApp/Functions/MQTTSettingInfoPage/Controller": [
+
+                ],
+                "MKNBHplugApp/Functions/DeviceInfoPage/Controller": [
+
+                ],
+                "MKNBHplugApp/Functions/DebuggerPage/Controller": [
+
+                ]
+              }
+            },
+            {
+              "name": "Model",
+              "source_files": "MKNBHplugApp/Classes/Functions/SettingsPage/Model/**"
+            }
+          ]
+        },
+        {
+          "name": "SwitchStatePage",
+          "subspecs": [
+            {
+              "name": "Controller",
+              "source_files": "MKNBHplugApp/Classes/Functions/SwitchStatePage/Controller/**",
+              "dependencies": {
+                "MKNBHplugApp/Functions/SwitchStatePage/Model": [
+
+                ],
+                "MKNBHplugApp/Functions/SwitchStatePage/View": [
+
+                ],
+                "MKNBHplugApp/Functions/ElectricityPage/Controller": [
+
+                ],
+                "MKNBHplugApp/Functions/EnergyPage/Controller": [
+
+                ],
+                "MKNBHplugApp/Functions/SettingsPage/Controller": [
+
+                ]
+              }
+            },
+            {
+              "name": "Model",
+              "source_files": "MKNBHplugApp/Classes/Functions/SwitchStatePage/Model/**"
+            },
+            {
+              "name": "View",
+              "source_files": "MKNBHplugApp/Classes/Functions/SwitchStatePage/View/**"
+            }
+          ]
+        },
+        {
+          "name": "SystemTimePage",
+          "subspecs": [
+            {
+              "name": "Controller",
+              "source_files": "MKNBHplugApp/Classes/Functions/SystemTimePage/Controller/**",
+              "dependencies": {
+                "MKNBHplugApp/Functions/SystemTimePage/Model": [
+
+                ],
+                "MKNBHplugApp/Functions/SystemTimePage/View": [
+
+                ],
+                "MKNBHplugApp/Functions/NTPServerPage/Controller": [
+
+                ]
+              }
+            },
+            {
+              "name": "Model",
+              "source_files": "MKNBHplugApp/Classes/Functions/SystemTimePage/Model/**"
+            },
+            {
+              "name": "View",
+              "source_files": "MKNBHplugApp/Classes/Functions/SystemTimePage/View/**"
+            }
+          ]
+        },
+        {
+          "name": "UpdatePage",
+          "dependencies": {
+            "iOSDFULibrary": [
+
+            ]
+          },
+          "subspecs": [
+            {
+              "name": "Controller",
+              "source_files": "MKNBHplugApp/Classes/Functions/UpdatePage/Controller/**",
+              "dependencies": {
+                "MKNBHplugApp/Functions/UpdatePage/Model": [
+
+                ]
+              }
+            },
+            {
+              "name": "Model",
+              "source_files": "MKNBHplugApp/Classes/Functions/UpdatePage/Model/**"
+            }
+          ]
+        }
+      ]
+    }
+  ]
 }

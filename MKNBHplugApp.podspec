@@ -177,10 +177,15 @@ TODO: Add long description of the pod here.
         ssss.source_files = 'MKNBHplugApp/Classes/Functions/DeviceListPage/Controller/**'
       
         ssss.dependency 'MKNBHplugApp/Functions/DeviceListPage/View'
+        ssss.dependency 'MKNBHplugApp/Functions/DeviceListPage/Model'
       
         ssss.dependency 'MKNBHplugApp/Functions/ServerForApp/Controller'
         ssss.dependency 'MKNBHplugApp/Functions/ScanPage/Controller'
         ssss.dependency 'MKNBHplugApp/Functions/SwitchStatePage/Controller'
+      end
+      
+      sss.subspec 'Model' do |ssss|
+        ssss.source_files = 'MKNBHplugApp/Classes/Functions/DeviceListPage/Model/**'
       end
     
       sss.subspec 'View' do |ssss|

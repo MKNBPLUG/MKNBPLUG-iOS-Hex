@@ -96,7 +96,7 @@
     NSInteger powerInt = [returnData[@"data"][@"power"] integerValue];
     self.power = [NSString stringWithFormat:@"%.1f",(powerInt * 0.1)];
     
-    NSInteger factorInt = [returnData[@"data"][@"power_factor"] integerValue];
+    NSInteger factorInt = [returnData[@"data"][@"factor"] integerValue];
     self.factor = [NSString stringWithFormat:@"%.2f",(factorInt * 0.01)];
     
     NSInteger frequencyInt = [returnData[@"data"][@"frequency"] integerValue];

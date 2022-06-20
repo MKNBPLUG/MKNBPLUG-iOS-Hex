@@ -20,8 +20,8 @@
 
 #import "MKHudManager.h"
 #import "MKCustomUIAdopter.h"
-#import "MKAlertController.h"
 #import "MKAboutController.h"
+#import "MKAlertView.h"
 
 #import "MKNetworkManager.h"
 
@@ -33,6 +33,8 @@
 #import "MKNBHMQTTInterface+MKNBHConfig.h"
 
 #import "MKNBHDeviceListDatabaseManager.h"
+
+#import "MKNBHDeviceListDataModel.h"
 
 #import "MKNBHAddDeviceView.h"
 #import "MKNBHDeviceListCell.h"
@@ -65,6 +67,8 @@ MKNBHDeviceListCellDelegate>
 //不能立即刷新列表，降低刷新频率
 @property (nonatomic, assign)BOOL isNeedRefresh;
 
+@property (nonatomic, strong)MKNBHDeviceListDataModel *dataModel;
+
 @end
 
 @implementation MKNBHDeviceListController
@@ -88,6 +92,7 @@ MKNBHDeviceListCellDelegate>
     [self readDataFromDatabase];
     [self runloopObserver];
     [self addNotifications];
+    [self startDataMonitor];
 }
 
 #pragma mark - super method
@@ -169,21 +174,20 @@ MKNBHDeviceListCellDelegate>
         return;
     }
     
-    MKAlertController *alertView = [MKAlertController alertControllerWithTitle:@"Remove Device"
-                                                                       message:@"Please confirm again whether to remove the device."
-                                                                preferredStyle:UIAlertControllerStyleAlert];
-    alertView.notificationName = @"mk_nbh_needDismissAlert";
     @weakify(self);
-    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+    MKAlertViewAction *cancelAction = [[MKAlertViewAction alloc] initWithTitle:@"Cancel" handler:^{
+        
     }];
-    [alertView addAction:cancelAction];
-    UIAlertAction *moreAction = [UIAlertAction actionWithTitle:@"Confirm" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+    
+    MKAlertViewAction *confirmAction = [[MKAlertViewAction alloc] initWithTitle:@"Confirm" handler:^{
         @strongify(self);
         [self removeDeviceFromLocal:index];
     }];
-    [alertView addAction:moreAction];
-    
-    [self presentViewController:alertView animated:YES completion:nil];
+    NSString *msg = @"Please confirm again whether to remove the device.";
+    MKAlertView *alertView = [[MKAlertView alloc] init];
+    [alertView addAction:cancelAction];
+    [alertView addAction:confirmAction];
+    [alertView showAlertWithTitle:@"Remove Device" message:msg notificationName:@"mk_nbh_needDismissAlert"];
 }
 
 #pragma mark - MKNBHDeviceModelDelegate
@@ -267,74 +271,6 @@ MKNBHDeviceListCellDelegate>
     [[MKNBHMQTTServerManager shared] unsubscriptions:@[unsubTopic]];
     [self loadMainViews];
     [[MKNBHMQTTServerManager shared] subscriptions:@[user[@"publishedTopic"]]];
-}
-
-/// 设备在线通知
-/// @param note 通知
-/*
-    注意，因为这个在线状态没有开关状态，所以业务要求如下，当前设备是在线状态，则只清零计数不改变状态，如果是离线状态则显示开关关闭状态
- */
-- (void)receiveDeviceOnlineState:(NSNotification *)note {
-    NSDictionary *user = note.userInfo;
-    if (!ValidDict(user) || !ValidStr(user[@"deviceID"]) || self.dataList.count == 0) {
-        return;
-    }
-    for (NSInteger i = 0; i < self.dataList.count; i ++) {
-        MKNBHDeviceModel *deviceModel = self.dataList[i];
-        if ([deviceModel.deviceID isEqualToString:user[@"deviceID"]]) {
-            [deviceModel resetTimerCounter];
-            if (deviceModel.state == MKNBHDeviceModelStateOffline) {
-                deviceModel.state = MKNBHDeviceModelStateOff;
-            }
-            break;
-        }
-    }
-    [self needRefreshList];
-}
-
-- (void)receiveSwitchState:(NSNotification *)note {
-    NSDictionary *user = note.userInfo;
-    if (!ValidDict(user) || self.dataList.count == 0) {
-        return;
-    }
-    for (NSInteger i = 0; i < self.dataList.count; i ++) {
-        MKNBHDeviceModel *deviceModel = self.dataList[i];
-        if ([deviceModel.deviceID isEqualToString:user[@"device_id"]]) {
-            [deviceModel resetTimerCounter];
-            MKNBHDeviceModelState state = ([user[@"data"][@"switch_state"] boolValue] ? MKNBHDeviceModelStateOn : MKNBHDeviceModelStateOff);
-            deviceModel.state = state;
-            MKNBHDeviceOverState overState = MKNBHDeviceOverState_normal;
-            if ([user[@"data"][@"overload_state"] boolValue]) {
-                overState = MKNBHDeviceOverState_overLoad;
-            }else if ([user[@"data"][@"overcurrent_state"] boolValue]) {
-                overState = MKNBHDeviceOverState_overCurrent;
-            }else if ([user[@"data"][@"overvoltage_state"] boolValue]) {
-                overState = MKNBHDeviceOverState_overVoltage;
-            }else if ([user[@"data"][@"undervoltage_state"] boolValue]) {
-                overState = MKNBHDeviceOverState_underVoltage;
-            }
-            deviceModel.overState = overState;
-            break;
-        }
-    }
-    [self needRefreshList];
-}
-
-- (void)receiveDeviceNameChanged:(NSNotification *)note {
-    NSDictionary *user = note.userInfo;
-    if (!ValidDict(user) || !ValidStr(user[@"macAddress"]) || self.dataList.count == 0) {
-        return;
-    }
-    NSInteger index = 0;
-    for (NSInteger i = 0; i < self.dataList.count; i ++) {
-        MKNBHDeviceModel *deviceModel = self.dataList[i];
-        if ([deviceModel.macAddress isEqualToString:user[@"macAddress"]]) {
-            deviceModel.deviceName = user[@"deviceName"];
-            index = i;
-            break;
-        }
-    }
-    [self.tableView mk_reloadRow:index inSection:0 withRowAnimation:UITableViewRowAnimationNone];
 }
 
 - (void)receiveDeleteDevice:(NSNotification *)note {
@@ -512,18 +448,6 @@ MKNBHDeviceListCellDelegate>
                                                  name:@"mk_nbh_addNewDeviceSuccessNotification"
                                                object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(receiveDeviceOnlineState:)
-                                                 name:MKNBHReceiveDeviceNetStateNotification
-                                               object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(receiveSwitchState:)
-                                                 name:MKNBHReceivedSwitchStateNotification
-                                               object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(receiveDeviceNameChanged:)
-                                                 name:@"mk_nbh_deviceNameChangedNotification"
-                                               object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(receiveDeviceModifyMQTTServer:)
                                                  name:@"mk_nbh_deviceModifyMQTTServerSuccessNotification"
                                                object:nil];
@@ -547,6 +471,123 @@ MKNBHDeviceListCellDelegate>
                                              selector:@selector(reloadDeviceTopics)
                                                  name:@"mk_nbh_needReloadTopicsNotification"
                                                object:nil];
+}
+
+- (void)startDataMonitor {
+    @weakify(self);
+    self.dataModel.deviceOnlineBlock = ^(NSString * _Nonnull deviceID) {
+        @strongify(self);
+        [self receiveDeviceOnlineState:deviceID];
+    };
+    self.dataModel.switchStateChangedBlock = ^(NSDictionary * _Nonnull dataDic, NSString * _Nonnull deviceID) {
+        @strongify(self);
+        [self receiveSwitchState:dataDic deviceID:deviceID];
+    };
+    self.dataModel.receiveOverloadBlock = ^(BOOL overload, NSString * _Nonnull deviceID) {
+        @strongify(self);
+        MKNBHDeviceOverState state = (overload ? MKNBHDeviceOverState_overLoad : MKNBHDeviceOverState_normal);
+        [self deviceOverStateChanged:state deviceID:deviceID];
+    };
+    self.dataModel.receiveOvercurrentBlock = ^(BOOL overcurrent, NSString * _Nonnull deviceID) {
+        @strongify(self);
+        MKNBHDeviceOverState state = (overcurrent ? MKNBHDeviceOverState_overCurrent : MKNBHDeviceOverState_normal);
+        [self deviceOverStateChanged:state deviceID:deviceID];
+    };
+    self.dataModel.receiveOvervoltageBlock = ^(BOOL overvoltage, NSString * _Nonnull deviceID) {
+        @strongify(self);
+        MKNBHDeviceOverState state = (overvoltage ? MKNBHDeviceOverState_overVoltage : MKNBHDeviceOverState_normal);
+        [self deviceOverStateChanged:state deviceID:deviceID];
+    };
+    self.dataModel.receiveUndervoltageBlock = ^(BOOL undervoltage, NSString * _Nonnull deviceID) {
+        @strongify(self);
+        MKNBHDeviceOverState state = (undervoltage ? MKNBHDeviceOverState_underVoltage : MKNBHDeviceOverState_normal);
+        [self deviceOverStateChanged:state deviceID:deviceID];
+    };
+    self.dataModel.receiveDeviceNameChangedBlock = ^(NSString * _Nonnull macAddress, NSString * _Nonnull deviceName) {
+        @strongify(self);
+        [self receiveDeviceNameChanged:macAddress deviceName:deviceName];
+    };
+}
+
+#pragma mark - block
+- (void)receiveSwitchState:(NSDictionary *)dataDic deviceID:(NSString *)deviceID {
+    if (self.dataList.count == 0 || !ValidStr(deviceID)) {
+        return;
+    }
+    for (NSInteger i = 0; i < self.dataList.count; i ++) {
+        MKNBHDeviceModel *deviceModel = self.dataList[i];
+        if ([deviceModel.deviceID isEqualToString:deviceID]) {
+            [deviceModel resetTimerCounter];
+            MKNBHDeviceModelState state = (([dataDic[@"switch_state"] integerValue] == 1) ? MKNBHDeviceModelStateOn : MKNBHDeviceModelStateOff);
+            deviceModel.state = state;
+            MKNBHDeviceOverState overState = MKNBHDeviceOverState_normal;
+            if (ValidNum(dataDic[@"overload_state"]) && [dataDic[@"overload_state"] integerValue] == 1) {
+                overState = MKNBHDeviceOverState_overLoad;
+            }else if (ValidNum(dataDic[@"overcurrent_state"]) && [dataDic[@"overcurrent_state"] integerValue] == 1) {
+                overState = MKNBHDeviceOverState_overCurrent;
+            }else if (ValidNum(dataDic[@"overvoltage_state"]) && [dataDic[@"overvoltage_state"] integerValue] == 1) {
+                overState = MKNBHDeviceOverState_overVoltage;
+            }else if (ValidNum(dataDic[@"undervoltage_state"]) && [dataDic[@"undervoltage_state"] integerValue] == 1) {
+                overState = MKNBHDeviceOverState_underVoltage;
+            }
+            deviceModel.overState = overState;
+            break;
+        }
+    }
+    [self needRefreshList];
+}
+
+- (void)deviceOverStateChanged:(MKNBHDeviceOverState)overState deviceID:(NSString *)deviceID {
+    if (self.dataList.count == 0 || !ValidStr(deviceID)) {
+        return;
+    }
+    for (NSInteger i = 0; i < self.dataList.count; i ++) {
+        MKNBHDeviceModel *deviceModel = self.dataList[i];
+        if ([deviceModel.deviceID isEqualToString:deviceID]) {
+            [deviceModel resetTimerCounter];
+            deviceModel.overState = overState;
+            break;
+        }
+    }
+    [self needRefreshList];
+}
+
+/// 设备在线通知
+/// @param note 通知
+/*
+    注意，因为这个在线状态没有开关状态，所以业务要求如下，当前设备是在线状态，则只清零计数不改变状态，如果是离线状态则显示开关关闭状态
+ */
+- (void)receiveDeviceOnlineState:(NSString *)deviceID {
+    if (!ValidStr(deviceID) || self.dataList.count == 0) {
+        return;
+    }
+    for (NSInteger i = 0; i < self.dataList.count; i ++) {
+        MKNBHDeviceModel *deviceModel = self.dataList[i];
+        if ([deviceModel.deviceID isEqualToString:deviceID]) {
+            [deviceModel resetTimerCounter];
+            if (deviceModel.state == MKNBHDeviceModelStateOffline) {
+                deviceModel.state = MKNBHDeviceModelStateOff;
+            }
+            break;
+        }
+    }
+    [self needRefreshList];
+}
+
+- (void)receiveDeviceNameChanged:(NSString *)macAddress deviceName:(NSString *)deviceName {
+    if (!ValidStr(deviceName) || !ValidStr(macAddress) || self.dataList.count == 0) {
+        return;
+    }
+    NSInteger index = 0;
+    for (NSInteger i = 0; i < self.dataList.count; i ++) {
+        MKNBHDeviceModel *deviceModel = self.dataList[i];
+        if ([deviceModel.macAddress isEqualToString:macAddress]) {
+            deviceModel.deviceName = deviceName;
+            index = i;
+            break;
+        }
+    }
+    [self.tableView mk_reloadRow:index inSection:0 withRowAnimation:UITableViewRowAnimationNone];
 }
 
 #pragma mark - 定时刷新
@@ -622,6 +663,13 @@ MKNBHDeviceListCellDelegate>
         _dataList = [NSMutableArray array];
     }
     return _dataList;
+}
+
+- (MKNBHDeviceListDataModel *)dataModel {
+    if (!_dataModel) {
+        _dataModel = [[MKNBHDeviceListDataModel alloc] init];
+    }
+    return _dataModel;
 }
 
 - (UIView *)footerView {
